@@ -45,6 +45,9 @@ SCRAPER_APPS = [
 THIRD_PARTY_APPS = [
     "django_celery_beat",
     "django_celery_results",
+    'rest_framework',
+    "django_filters",
+
 ]
 
 INSTALLED_APPS = DJANGO_APPS + SCRAPER_APPS + THIRD_PARTY_APPS
@@ -59,7 +62,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'scraper.urls'
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
@@ -77,7 +80,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'scraper.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # Database
