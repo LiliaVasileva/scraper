@@ -1,6 +1,8 @@
 import time
 from urllib.parse import urljoin
 import uuid
+import logging
+
 from celery import shared_task
 from django.core.files.base import ContentFile
 from selenium import webdriver
@@ -11,9 +13,12 @@ from bs4 import BeautifulSoup
 from .utils import normalize_url, should_visit_url
 from .models import ScreenshotTask, Screenshot
 
+logger = logging.getLogger(__name__)
+
 
 @shared_task
 def capture_screenshots(task_id, start_url, num_links):
+    logger.info(f'Starting screenshot task for URL: {start_url}')
     driver = webdriver.Chrome()
 
     task = ScreenshotTask.objects.get(task_id=task_id)
@@ -43,6 +48,8 @@ def capture_screenshots(task_id, start_url, num_links):
 
         screenshot_binary = driver.get_screenshot_as_png()
         screenshot_filename = f'{url}--{uuid.uuid4()}.png'
+
+        logger.info(f'Finished screenshot task for URL: {url}, saved to {screenshot_filename}')
 
         task = ScreenshotTask.objects.get(task_id=task_id)
         screenshot = Screenshot.objects.create(task=task, url=url)
