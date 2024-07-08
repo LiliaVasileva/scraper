@@ -47,6 +47,7 @@ THIRD_PARTY_APPS = [
     "django_celery_results",
     'rest_framework',
     "django_filters",
+    'drf_yasg',
 
 ]
 

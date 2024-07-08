@@ -35,7 +35,11 @@ def capture_screenshots(task_id, start_url, num_links):
                 agree_button = driver.find_element(By.XPATH, '//button[text()="I Agree"]')
                 agree_button.click()
             except NoSuchElementException:
-                print("Neither 'Accept' nor 'I Agree' button found.")
+                try:
+                    agree_button = driver.find_element(By.XPATH, '//button[text()="Accept All"]')
+                    agree_button.click()
+                except NoSuchElementException:
+                    print("Neither 'Accept' or 'Accept All' nor 'I Agree' button found.")
 
         screenshot_binary = driver.get_screenshot_as_png()
         screenshot_filename = f'{url}--{uuid.uuid4()}.png'
@@ -51,14 +55,8 @@ def capture_screenshots(task_id, start_url, num_links):
         for link in soup.find_all('a', href=True):
 
             link_url = urljoin(url, link['href'])
-            print('before the check')
-            print(link_url)
-            print('all urls----------')
-            print(urls_to_visit)
             if should_visit_url(link_url, start_url, visited_urls):
                 urls_to_visit.append(normalize_url(link_url))
-                print('The actual link to make screenshot from ---')
-                print(normalize_url(link_url))
                 if len(urls_to_visit) >= num_links + 1:
                     break
 
